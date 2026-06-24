@@ -66,7 +66,7 @@ html, body {
 .tile-big-top { display: flex; align-items: center; gap: 10px; }
 .tile-big-icon { font-size: 22px; flex-shrink: 0; }
 .tile-big-name { font-size: 13px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #e8eaf0; }
-.tile-big-sub { font-size: 11px; color: #5a6890; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.tile-big-sub { font-size: 11px; color: #5a6890; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; }
 
 /* NOTE VIEW */
 #note-view { display: none; height: 100%; flex-direction: column; }
@@ -387,8 +387,8 @@ function renderMenuView() {
     el.style.background = tile.color;
     el.style.borderLeft = `3px solid ${tile.accent}`;
     const preview = loadNote(tile.id);
-    const sub = preview ? preview.replace(/\n/g, ' ').slice(0, 120) + (preview.length > 120 ? '…' : '') : 'Brak notatek';
-    el.innerHTML = `<div class="tile-big-top"><i class="ti ${tile.icon} tile-big-icon" style="color:${tile.accent}"></i><div class="tile-big-name">${tile.name}</div></div><div class="tile-big-sub">${sub}</div>`;
+    const sub = preview ? preview.slice(0, 200) : 'Brak notatek';
+    el.innerHTML = `<div class="tile-big-top"><i class="ti ${tile.icon} tile-big-icon" style="color:${tile.accent}"></i><div class="tile-big-name">${tile.name}</div></div><div class="tile-big-sub">${preview ? sub.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>') : 'Brak notatek'}</div>`;
     el.addEventListener('click', () => openNote(tile, true));
     elMenuGrid.appendChild(el);
   });
