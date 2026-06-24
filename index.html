@@ -59,13 +59,14 @@ html, body {
 #menu-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; width: 100%; }
 .tile-big {
   aspect-ratio: 1; cursor: pointer; border-radius: 6px;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 16px; transition: opacity .15s;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 14px 14px 12px; transition: opacity .15s;
 }
 .tile-big:active { opacity: .7; }
-.tile-big-icon { font-size: 28px; margin-bottom: auto; }
-.tile-big-name { font-size: 14px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #e8eaf0; }
-.tile-big-sub { font-size: 11px; color: #5a6478; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile-big-top { display: flex; align-items: center; gap: 10px; }
+.tile-big-icon { font-size: 22px; flex-shrink: 0; }
+.tile-big-name { font-size: 13px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #e8eaf0; }
+.tile-big-sub { font-size: 11px; color: #5a6890; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* NOTE VIEW */
 #note-view { display: none; height: 100%; flex-direction: column; }
@@ -255,6 +256,13 @@ html, body {
       <div class="edit-label">Ikona</div>
       <input id="icon-search-input" type="text" placeholder="Szukaj ikony..." autocomplete="off" />
       <div id="icon-grid"></div>
+
+      <div id="delete-zone" style="display:none;margin-top:32px;padding-top:24px;border-top:1px solid #1c2333">
+        <div class="edit-label" style="color:#ff4d6a">Usuń kafelek</div>
+        <p style="font-size:13px;color:#5a6478;margin-bottom:12px;line-height:1.5">Wpisz nazwę kafelka żeby potwierdzić usunięcie. Notatki zostaną usunięte na zawsze.</p>
+        <input id="delete-confirm-input" type="text" placeholder="Wpisz nazwę kafelka..." autocomplete="off" style="width:100%;background:#1a0d10;border:1px solid #3a1a22;color:#e8eaf0;font-size:15px;padding:12px 14px;border-radius:10px;outline:none;font-family:inherit;margin-bottom:12px" />
+        <button id="delete-confirm-btn" style="width:100%;background:none;border:1px solid #3a1a22;color:#ff4d6a;padding:12px;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit;opacity:.35"><i class="ti ti-trash" style="margin-right:8px"></i>Usuń kafelek</button>
+      </div>
     </div>
   </div>
 </div>
@@ -379,8 +387,8 @@ function renderMenuView() {
     el.style.background = tile.color;
     el.style.borderLeft = `3px solid ${tile.accent}`;
     const preview = loadNote(tile.id);
-    const sub = preview ? preview.replace(/\n/g, ' ').slice(0, 45) + (preview.length > 45 ? '…' : '') : 'Brak notatek';
-    el.innerHTML = `<i class="ti ${tile.icon} tile-big-icon" style="color:${tile.accent}"></i><div class="tile-big-name">${tile.name}</div><div class="tile-big-sub">${sub}</div>`;
+    const sub = preview ? preview.replace(/\n/g, ' ').slice(0, 120) + (preview.length > 120 ? '…' : '') : 'Brak notatek';
+    el.innerHTML = `<div class="tile-big-top"><i class="ti ${tile.icon} tile-big-icon" style="color:${tile.accent}"></i><div class="tile-big-name">${tile.name}</div></div><div class="tile-big-sub">${sub}</div>`;
     el.addEventListener('click', () => openNote(tile, true));
     elMenuGrid.appendChild(el);
   });
@@ -472,7 +480,6 @@ function renderManageList() {
           <button class="mi-btn arr" onclick="moveItem(${i},-1)" ${i===0?'disabled':''} aria-label="Wyżej"><i class="ti ti-chevron-up"></i></button>
           <button class="mi-btn arr" onclick="moveItem(${i},1)" ${i===tiles.length-1?'disabled':''} aria-label="Niżej"><i class="ti ti-chevron-down"></i></button>
         </div>
-        <button class="mi-btn del" onclick="deleteTile(${i})" aria-label="Usuń"><i class="ti ti-trash"></i></button>
       </div>`;
     elManageList.appendChild(el);
   });
@@ -499,12 +506,38 @@ window.openEditPanel = function(i) {
   editAccent = tile ? tile.accent : ACCENT_COLORS[0];
   editIcon = tile ? tile.icon : ICON_LIST[0];
 
+  const deleteZone = document.getElementById('delete-zone');
+  const deleteInput = document.getElementById('delete-confirm-input');
+  const deleteBtn = document.getElementById('delete-confirm-btn');
+  deleteZone.style.display = i >= 0 ? 'block' : 'none';
+  deleteInput.value = '';
+  deleteBtn.style.opacity = '.35';
+  deleteBtn.disabled = true;
+
   renderColorPicker();
   renderIconGrid('');
   elIconSearch.value = '';
   elEditPanel.style.display = 'flex';
   setTimeout(() => elEditNameInput.focus(), 100);
 };
+
+document.getElementById('delete-confirm-input').addEventListener('input', function() {
+  const tile = editingIndex >= 0 ? tiles[editingIndex] : null;
+  const match = tile && this.value.trim() === tile.name;
+  const btn = document.getElementById('delete-confirm-btn');
+  btn.style.opacity = match ? '1' : '.35';
+  btn.disabled = !match;
+});
+
+document.getElementById('delete-confirm-btn').addEventListener('click', function() {
+  if (editingIndex < 0) return;
+  const tile = tiles[editingIndex];
+  if (document.getElementById('delete-confirm-input').value.trim() !== tile.name) return;
+  localStorage.removeItem('note_' + tile.id);
+  tiles.splice(editingIndex, 1);
+  elEditPanel.style.display = 'none';
+  renderManageList();
+});
 
 function renderColorPicker() {
   elColorPicker.innerHTML = '';
