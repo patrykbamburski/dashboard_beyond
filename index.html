@@ -11,8 +11,8 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body {
-    background: #0a0a0a;
-    color: #f0f0f0;
+    background: #0d1117;
+    color: #e8eaf0;
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
     height: 100%;
     overflow: hidden;
@@ -26,8 +26,7 @@
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #0a0a0a;
-    position: relative;
+    background: #0d1117;
     overflow: hidden;
   }
 
@@ -87,7 +86,7 @@
     margin-top: 5px;
     line-height: 1.2;
     letter-spacing: .2px;
-    color: #aaa;
+    color: #8a9bb8;
   }
 
   /* MENU 2-column */
@@ -105,8 +104,8 @@
   }
   .tile-big:active { opacity: .7; }
   .tile-big-icon { font-size: 28px; margin-bottom: auto; }
-  .tile-big-name { font-size: 14px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #f0f0f0; }
-  .tile-big-sub { font-size: 11px; color: #666; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile-big-name { font-size: 14px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #e8eaf0; }
+  .tile-big-sub { font-size: 11px; color: #5a6478; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* NOTE VIEW */
   #note-view { display: none; height: 100%; flex-direction: column; }
@@ -116,7 +115,7 @@
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1c2333;
   }
   #note-color-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   #note-title { font-size: 15px; font-weight: 600; }
@@ -128,12 +127,12 @@
     resize: none;
     background: transparent;
     border: none;
-    color: #e8e8e8;
+    color: #c9d1e0;
     outline: none;
     font-family: inherit;
     overflow-y: auto;
   }
-  #note-area::placeholder { color: #333; }
+  #note-area::placeholder { color: #2a3248; }
 
   /* BOTTOM BAR */
   #bottom-bar {
@@ -143,16 +142,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 1px solid #111;
+    border-top: 1px solid #1c2333;
     min-height: 64px;
   }
   #menu-toggle {
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    border: 1.5px solid #2a2a2a;
+    border: 1.5px solid #2a3a5c;
     background: none;
-    color: #f0f0f0;
+    color: #e8eaf0;
     font-size: 20px;
     cursor: pointer;
     display: flex;
@@ -160,11 +159,11 @@
     justify-content: center;
     transition: background .15s;
   }
-  #menu-toggle:active { background: #1a1a1a; }
+  #menu-toggle:active { background: #161e30; }
   #back-btn {
     background: none;
     border: none;
-    color: #f0f0f0;
+    color: #e8eaf0;
     font-size: 15px;
     cursor: pointer;
     display: flex;
@@ -180,7 +179,7 @@
     display: none;
     position: absolute;
     inset: 0;
-    background: #0a0a0a;
+    background: #0d1117;
     z-index: 20;
     flex-direction: column;
   }
@@ -190,13 +189,13 @@
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1c2333;
   }
   #reorder-title { font-size: 16px; font-weight: 600; }
   #reorder-done {
     background: none;
-    border: 1px solid #333;
-    color: #f0f0f0;
+    border: 1px solid #2a3a5c;
+    color: #e8eaf0;
     padding: 6px 18px;
     border-radius: 20px;
     font-size: 13px;
@@ -209,7 +208,7 @@
     align-items: center;
     gap: 14px;
     padding: 14px 12px;
-    border-bottom: 1px solid #141414;
+    border-bottom: 1px solid #161e2e;
   }
   .reorder-item-icon {
     width: 38px;
@@ -225,8 +224,8 @@
   .reorder-btns { display: flex; flex-direction: column; gap: 4px; }
   .reorder-btns button {
     background: none;
-    border: 1px solid #2a2a2a;
-    color: #888;
+    border: 1px solid #1e2d4a;
+    color: #5a6a8a;
     width: 30px;
     height: 26px;
     border-radius: 5px;
@@ -237,7 +236,7 @@
     padding: 0;
     font-size: 14px;
   }
-  .reorder-btns button:active { background: #1e1e1e; }
+  .reorder-btns button:active { background: #161e30; }
   .reorder-btns button:disabled { opacity: .2; cursor: default; }
 </style>
 </head>
@@ -276,16 +275,16 @@
 
 <script>
 const DEFAULT_TILES = [
-  { id: 'plan-dnia',      name: 'Plan dnia',         icon: 'ti-calendar-event', color: '#0f1423', accent: '#4f8ef7' },
-  { id: 'kalorie',        name: 'Bilans kaloryczny',  icon: 'ti-salad',          color: '#0d1a0d', accent: '#4caf50' },
-  { id: 'plan-tygodnia',  name: 'Plan tygodnia',      icon: 'ti-calendar-week',  color: '#1e1805', accent: '#f5a623' },
-  { id: 'plan-miesiaca',  name: 'Plan miesiąca',      icon: 'ti-calendar-month', color: '#160d1e', accent: '#b967db' },
-  { id: 'cele',           name: 'Cele',               icon: 'ti-target',         color: '#1e0d0d', accent: '#e74c3c' },
-  { id: 'wydatki',        name: 'Bilans wydatków',    icon: 'ti-coin',           color: '#051a18', accent: '#1abc9c' },
-  { id: 'inwestycje',     name: 'Inwestycje',         icon: 'ti-trending-up',    color: '#071a07', accent: '#27ae60' },
-  { id: 'trening',        name: 'Trening',            icon: 'ti-barbell',        color: '#1a0510', accent: '#e84393' },
-  { id: 'zakupy',         name: 'Do kupienia',        icon: 'ti-shopping-cart',  color: '#05050f', accent: '#3498db' },
-  { id: 'podroze',        name: 'Podróże',            icon: 'ti-plane',          color: '#021a12', accent: '#16a085' },
+  { id: 'plan-dnia',      name: 'Plan dnia',         icon: 'ti-calendar-event', color: '#0e1a3a', accent: '#4d9fff' },
+  { id: 'kalorie',        name: 'Bilans kaloryczny',  icon: 'ti-salad',          color: '#0a2218', accent: '#2ecc71' },
+  { id: 'plan-tygodnia',  name: 'Plan tygodnia',      icon: 'ti-calendar-week',  color: '#211a08', accent: '#ffb830' },
+  { id: 'plan-miesiaca',  name: 'Plan miesiąca',      icon: 'ti-calendar-month', color: '#1a0d2e', accent: '#c678f5' },
+  { id: 'cele',           name: 'Cele',               icon: 'ti-target',         color: '#2a0d10', accent: '#ff4d6a' },
+  { id: 'wydatki',        name: 'Bilans wydatków',    icon: 'ti-coin',           color: '#082422', accent: '#00e5cc' },
+  { id: 'inwestycje',     name: 'Inwestycje',         icon: 'ti-trending-up',    color: '#0a2010', accent: '#00d46a' },
+  { id: 'trening',        name: 'Trening',            icon: 'ti-barbell',        color: '#2a0a1a', accent: '#ff3d9a' },
+  { id: 'zakupy',         name: 'Do kupienia',        icon: 'ti-shopping-cart',  color: '#080e2e', accent: '#4d8fff' },
+  { id: 'podroze',        name: 'Podróże',            icon: 'ti-plane',          color: '#082820', accent: '#00c8a0' },
 ];
 
 let tiles = [];
