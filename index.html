@@ -9,242 +9,207 @@
 <title>Dashboard</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    background: #0d1117;
-    color: #e8eaf0;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-    height: 100%;
-    overflow: hidden;
-    user-select: none;
-  }
-  #app {
-    width: 100%;
-    max-width: 430px;
-    margin: 0 auto;
-    height: 100vh;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    background: #0d1117;
-    overflow: hidden;
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  background: #0d1117; color: #e8eaf0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  height: 100%; overflow: hidden; user-select: none;
+}
+#app {
+  width: 100%; max-width: 430px; margin: 0 auto;
+  height: 100vh; height: 100dvh;
+  display: flex; flex-direction: column;
+  background: #0d1117; position: relative; overflow: hidden;
+}
 
-  /* TOP BAR */
-  #topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: env(safe-area-inset-top, 16px) 20px 12px;
-    padding-top: max(env(safe-area-inset-top), 16px);
-    flex-shrink: 0;
-  }
-  #topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: -.3px; }
-  #dots-btn {
-    background: none;
-    border: none;
-    color: #f0f0f0;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 4px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-  }
+/* TOP BAR */
+#topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: env(safe-area-inset-top, 16px) 20px 12px;
+  padding-top: max(env(safe-area-inset-top), 16px); flex-shrink: 0;
+}
+#topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: -.3px; }
+#dots-btn {
+  background: none; border: none; color: #e8eaf0; font-size: 22px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; letter-spacing: 2px;
+}
 
-  /* MAIN VIEW */
-  #main-view { flex: 1; overflow: hidden; position: relative; }
+/* MAIN VIEW */
+#main-view { flex: 1; overflow: hidden; position: relative; }
 
-  /* GRID 4-column */
-  #grid-view {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    padding: 2px;
-    height: 100%;
-    align-content: start;
-  }
-  .tile-small {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1;
-    cursor: pointer;
-    border-radius: 6px;
-    padding: 8px 4px;
-    transition: opacity .15s;
-  }
-  .tile-small:active { opacity: .6; }
-  .tile-name {
-    font-size: 9px;
-    font-weight: 500;
-    text-align: center;
-    margin-top: 5px;
-    line-height: 1.2;
-    letter-spacing: .2px;
-    color: #8a9bb8;
-  }
+/* GRID 4-column */
+#grid-view {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; padding: 2px; height: 100%; align-content: start;
+}
+.tile-small {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; aspect-ratio: 1; cursor: pointer;
+  border-radius: 6px; padding: 8px 4px; transition: opacity .15s;
+}
+.tile-small:active { opacity: .6; }
+.tile-name {
+  font-size: 9px; font-weight: 500; text-align: center;
+  margin-top: 5px; line-height: 1.2; color: #8a9bb8;
+}
 
-  /* MENU 2-column */
-  #menu-view { display: none; height: 100%; overflow-y: auto; overflow-x: hidden; padding: 2px; width: 100%; }
-  #menu-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; width: 100%; }
-  .tile-big {
-    aspect-ratio: 1;
-    cursor: pointer;
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 16px;
-    transition: opacity .15s;
-  }
-  .tile-big:active { opacity: .7; }
-  .tile-big-icon { font-size: 28px; margin-bottom: auto; }
-  .tile-big-name { font-size: 14px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #e8eaf0; }
-  .tile-big-sub { font-size: 11px; color: #5a6478; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* MENU 2-column */
+#menu-view { display: none; height: 100%; overflow-y: auto; overflow-x: hidden; padding: 2px; width: 100%; }
+#menu-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; width: 100%; }
+.tile-big {
+  aspect-ratio: 1; cursor: pointer; border-radius: 6px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 16px; transition: opacity .15s;
+}
+.tile-big:active { opacity: .7; }
+.tile-big-icon { font-size: 28px; margin-bottom: auto; }
+.tile-big-name { font-size: 14px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #e8eaf0; }
+.tile-big-sub { font-size: 11px; color: #5a6478; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* NOTE VIEW */
-  #note-view { display: none; height: 100%; flex-direction: column; }
-  #note-header {
-    padding: 14px 20px 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    border-bottom: 1px solid #1c2333;
-  }
-  #note-color-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  #note-title { font-size: 15px; font-weight: 600; }
-  #note-area {
-    flex: 1;
-    padding: 16px 20px;
-    font-size: 15px;
-    line-height: 1.75;
-    resize: none;
-    background: transparent;
-    border: none;
-    color: #c9d1e0;
-    outline: none;
-    font-family: inherit;
-    overflow-y: auto;
-  }
-  #note-area::placeholder { color: #2a3248; }
+/* NOTE VIEW */
+#note-view { display: none; height: 100%; flex-direction: column; }
+#note-header {
+  padding: 14px 20px 10px; display: flex; align-items: center;
+  gap: 10px; flex-shrink: 0; border-bottom: 1px solid #1c2333;
+}
+#note-color-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+#note-title { font-size: 15px; font-weight: 600; }
+#note-area {
+  flex: 1; padding: 16px 20px; font-size: 15px; line-height: 1.75;
+  resize: none; background: transparent; border: none; color: #c9d1e0;
+  outline: none; font-family: inherit; overflow-y: auto;
+}
+#note-area::placeholder { color: #2a3248; }
 
-  /* BOTTOM BAR */
-  #bottom-bar {
-    flex-shrink: 0;
-    padding: 10px 20px;
-    padding-bottom: max(env(safe-area-inset-bottom), 20px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 1px solid #1c2333;
-    min-height: 64px;
-  }
-  #menu-toggle {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    border: 1.5px solid #2a3a5c;
-    background: none;
-    color: #e8eaf0;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background .15s;
-  }
-  #menu-toggle:active { background: #161e30; }
-  #back-btn {
-    background: none;
-    border: none;
-    color: #e8eaf0;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 0;
-    font-family: inherit;
-  }
-  #back-btn i { font-size: 20px; }
+/* BOTTOM BAR */
+#bottom-bar {
+  flex-shrink: 0; padding: 10px 20px;
+  padding-bottom: max(env(safe-area-inset-bottom), 20px);
+  display: flex; justify-content: center; align-items: center;
+  border-top: 1px solid #1c2333; min-height: 64px;
+}
+#menu-toggle {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1.5px solid #2a3a5c; background: none; color: #e8eaf0;
+  font-size: 20px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: background .15s;
+}
+#menu-toggle:active { background: #161e30; }
+#back-btn {
+  background: none; border: none; color: #e8eaf0; font-size: 15px;
+  cursor: pointer; display: flex; align-items: center;
+  gap: 6px; padding: 8px 0; font-family: inherit;
+}
+#back-btn i { font-size: 20px; }
 
-  /* REORDER OVERLAY */
-  #reorder-overlay {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: #0d1117;
-    z-index: 20;
-    flex-direction: column;
-  }
-  #reorder-header {
-    padding: max(env(safe-area-inset-top), 16px) 20px 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-    border-bottom: 1px solid #1c2333;
-  }
-  #reorder-title { font-size: 16px; font-weight: 600; }
-  #reorder-done {
-    background: none;
-    border: 1px solid #2a3a5c;
-    color: #e8eaf0;
-    padding: 6px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  #reorder-list { flex: 1; overflow-y: auto; padding: 0 4px; }
-  .reorder-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 12px;
-    border-bottom: 1px solid #161e2e;
-  }
-  .reorder-item-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 20px;
-  }
-  .reorder-item-name { flex: 1; font-size: 14px; font-weight: 500; }
-  .reorder-btns { display: flex; flex-direction: column; gap: 4px; }
-  .reorder-btns button {
-    background: none;
-    border: 1px solid #1e2d4a;
-    color: #5a6a8a;
-    width: 30px;
-    height: 26px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    font-size: 14px;
-  }
-  .reorder-btns button:active { background: #161e30; }
-  .reorder-btns button:disabled { opacity: .2; cursor: default; }
+/* MANAGE OVERLAY */
+#manage-overlay {
+  display: none; position: absolute; inset: 0;
+  background: #0d1117; z-index: 20; flex-direction: column;
+}
+#manage-header {
+  padding: max(env(safe-area-inset-top), 16px) 16px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; border-bottom: 1px solid #1c2333;
+}
+#manage-title { font-size: 16px; font-weight: 600; }
+#manage-done {
+  background: none; border: 1px solid #2a3a5c; color: #e8eaf0;
+  padding: 6px 18px; border-radius: 20px; font-size: 13px;
+  cursor: pointer; font-family: inherit;
+}
+#manage-add-btn {
+  display: flex; align-items: center; gap: 10px;
+  margin: 12px 16px 4px; padding: 12px 14px;
+  border: 1px dashed #2a3a5c; border-radius: 10px;
+  background: none; color: #4d9fff; font-size: 14px;
+  cursor: pointer; font-family: inherit; width: calc(100% - 32px);
+}
+#manage-add-btn i { font-size: 18px; }
+#manage-list { flex: 1; overflow-y: auto; padding: 4px 8px 16px; }
+.manage-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 8px; border-bottom: 1px solid #161e2e;
+}
+.manage-item-icon {
+  width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.manage-item-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.manage-item-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.mi-btn {
+  background: none; border: 1px solid #1e2d4a; color: #5a6a8a;
+  border-radius: 5px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; padding: 0;
+}
+.mi-btn:active { background: #161e30; }
+.mi-btn.arr { width: 28px; height: 24px; font-size: 13px; }
+.mi-btn.edit { width: 32px; height: 32px; font-size: 15px; margin-right: 2px; }
+.mi-btn.del { width: 32px; height: 32px; font-size: 15px; color: #ff4d6a; border-color: #3a1a22; }
+.mi-btn:disabled { opacity: .2; cursor: default; }
+
+/* EDIT PANEL */
+#edit-panel {
+  display: none; position: absolute; inset: 0;
+  background: #0d1117; z-index: 30; flex-direction: column;
+}
+#edit-header {
+  padding: max(env(safe-area-inset-top), 16px) 16px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; border-bottom: 1px solid #1c2333;
+}
+#edit-title-bar { font-size: 16px; font-weight: 600; }
+#edit-save {
+  background: #4d9fff; border: none; color: #fff;
+  padding: 7px 20px; border-radius: 20px; font-size: 13px;
+  cursor: pointer; font-family: inherit; font-weight: 600;
+}
+#edit-body { flex: 1; overflow-y: auto; padding: 20px 16px; }
+.edit-label { font-size: 11px; font-weight: 600; color: #4d6a9a; letter-spacing: .8px; text-transform: uppercase; margin-bottom: 8px; }
+#edit-name-input {
+  width: 100%; background: #111926; border: 1px solid #1e2d4a;
+  color: #e8eaf0; font-size: 15px; padding: 12px 14px;
+  border-radius: 10px; outline: none; font-family: inherit; margin-bottom: 20px;
+}
+#edit-name-input:focus { border-color: #4d9fff; }
+
+/* ACCENT COLOR PICKER */
+.color-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.color-swatch {
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: transform .1s;
+  display: flex; align-items: center; justify-content: center;
+}
+.color-swatch.selected { border-color: #fff; transform: scale(1.15); }
+.color-swatch i { font-size: 14px; color: #fff; display: none; }
+.color-swatch.selected i { display: block; }
+
+/* ICON PICKER */
+#icon-search-input {
+  width: 100%; background: #111926; border: 1px solid #1e2d4a;
+  color: #e8eaf0; font-size: 14px; padding: 10px 14px;
+  border-radius: 10px; outline: none; font-family: inherit; margin-bottom: 12px;
+}
+#icon-search-input:focus { border-color: #4d9fff; }
+#icon-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+}
+.icon-btn {
+  aspect-ratio: 1; background: #111926; border: 1.5px solid transparent;
+  border-radius: 8px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; font-size: 22px;
+  color: #8a9bb8; transition: background .1s;
+}
+.icon-btn:active { background: #1a2440; }
+.icon-btn.selected { border-color: #4d9fff; color: #4d9fff; background: #0e1a3a; }
 </style>
 </head>
 <body>
 <div id="app">
   <div id="topbar">
     <h1 id="topbar-title">Dashboard</h1>
-    <button id="dots-btn" aria-label="Zmień kolejność">•••</button>
+    <button id="dots-btn" aria-label="Zarządzaj kafelkami">•••</button>
   </div>
 
   <div id="main-view">
@@ -264,50 +229,112 @@
     <button id="back-btn" style="display:none"><i class="ti ti-chevron-left"></i><span>Wróć</span></button>
   </div>
 
-  <div id="reorder-overlay">
-    <div id="reorder-header">
-      <span id="reorder-title">Zmień kolejność</span>
-      <button id="reorder-done">Gotowe</button>
+  <!-- MANAGE OVERLAY -->
+  <div id="manage-overlay">
+    <div id="manage-header">
+      <span id="manage-title">Kafelki</span>
+      <button id="manage-done">Gotowe</button>
     </div>
-    <div id="reorder-list"></div>
+    <button id="manage-add-btn"><i class="ti ti-plus"></i> Dodaj nowy kafelek</button>
+    <div id="manage-list"></div>
+  </div>
+
+  <!-- EDIT PANEL -->
+  <div id="edit-panel">
+    <div id="edit-header">
+      <span id="edit-title-bar">Edytuj kafelek</span>
+      <button id="edit-save">Zapisz</button>
+    </div>
+    <div id="edit-body">
+      <div class="edit-label">Nazwa</div>
+      <input id="edit-name-input" type="text" placeholder="Nazwa kafelka" autocomplete="off" />
+
+      <div class="edit-label">Kolor akcentu</div>
+      <div class="color-row" id="color-picker"></div>
+
+      <div class="edit-label">Ikona</div>
+      <input id="icon-search-input" type="text" placeholder="Szukaj ikony..." autocomplete="off" />
+      <div id="icon-grid"></div>
+    </div>
   </div>
 </div>
 
 <script>
+const ACCENT_COLORS = [
+  '#4d9fff','#2ecc71','#ffb830','#c678f5','#ff4d6a',
+  '#00e5cc','#00d46a','#ff3d9a','#f97316','#facc15',
+  '#38bdf8','#a78bfa','#fb923c','#4ade80','#f43f5e',
+  '#22d3ee','#e879f9','#84cc16','#fbbf24','#60a5fa',
+];
+
+const TILE_COLORS = [
+  '#0e1a3a','#0a2218','#211a08','#1a0d2e','#2a0d10',
+  '#082422','#0a2010','#2a0a1a','#080e2e','#082820',
+  '#0e1f3a','#1a1530','#0d2010','#220a14','#0a1e2a',
+];
+
+const ICON_LIST = [
+  'ti-calendar-event','ti-calendar-week','ti-calendar-month','ti-calendar',
+  'ti-salad','ti-barbell','ti-heart-rate-monitor','ti-run','ti-swim','ti-bike',
+  'ti-coin','ti-trending-up','ti-trending-down','ti-wallet','ti-credit-card','ti-piggy-bank','ti-cash',
+  'ti-target','ti-flag','ti-trophy','ti-star','ti-award',
+  'ti-shopping-cart','ti-shopping-bag','ti-package',
+  'ti-plane','ti-car','ti-train','ti-map-pin','ti-map','ti-compass',
+  'ti-note','ti-notebook','ti-checklist','ti-list','ti-checkbox',
+  'ti-user','ti-users','ti-home','ti-building',
+  'ti-chart-bar','ti-chart-line','ti-chart-pie','ti-report-analytics',
+  'ti-clock','ti-alarm','ti-hourglass',
+  'ti-settings','ti-tool','ti-bolt','ti-brain','ti-bulb',
+  'ti-music','ti-camera','ti-book','ti-pencil','ti-code',
+  'ti-moon','ti-sun','ti-cloud','ti-drop','ti-leaf',
+  'ti-dumbbell','ti-yoga','ti-massage','ti-apple',
+  'ti-phone','ti-mail','ti-message','ti-bell',
+  'ti-lock','ti-key','ti-shield','ti-eye',
+  'ti-flame','ti-diamond','ti-crown','ti-rocket','ti-planet',
+];
+
 const DEFAULT_TILES = [
-  { id: 'plan-dnia',      name: 'Plan dnia',         icon: 'ti-calendar-event', color: '#0e1a3a', accent: '#4d9fff' },
-  { id: 'kalorie',        name: 'Bilans kaloryczny',  icon: 'ti-salad',          color: '#0a2218', accent: '#2ecc71' },
-  { id: 'plan-tygodnia',  name: 'Plan tygodnia',      icon: 'ti-calendar-week',  color: '#211a08', accent: '#ffb830' },
-  { id: 'plan-miesiaca',  name: 'Plan miesiąca',      icon: 'ti-calendar-month', color: '#1a0d2e', accent: '#c678f5' },
-  { id: 'cele',           name: 'Cele',               icon: 'ti-target',         color: '#2a0d10', accent: '#ff4d6a' },
-  { id: 'wydatki',        name: 'Bilans wydatków',    icon: 'ti-coin',           color: '#082422', accent: '#00e5cc' },
-  { id: 'inwestycje',     name: 'Inwestycje',         icon: 'ti-trending-up',    color: '#0a2010', accent: '#00d46a' },
-  { id: 'trening',        name: 'Trening',            icon: 'ti-barbell',        color: '#2a0a1a', accent: '#ff3d9a' },
-  { id: 'zakupy',         name: 'Do kupienia',        icon: 'ti-shopping-cart',  color: '#080e2e', accent: '#4d8fff' },
-  { id: 'podroze',        name: 'Podróże',            icon: 'ti-plane',          color: '#082820', accent: '#00c8a0' },
+  { id: 'plan-dnia',     name: 'Plan dnia',        icon: 'ti-calendar-event', color: '#0e1a3a', accent: '#4d9fff' },
+  { id: 'kalorie',       name: 'Bilans kaloryczny', icon: 'ti-salad',          color: '#0a2218', accent: '#2ecc71' },
+  { id: 'plan-tygodnia', name: 'Plan tygodnia',     icon: 'ti-calendar-week',  color: '#211a08', accent: '#ffb830' },
+  { id: 'plan-miesiaca', name: 'Plan miesiąca',     icon: 'ti-calendar-month', color: '#1a0d2e', accent: '#c678f5' },
+  { id: 'cele',          name: 'Cele',              icon: 'ti-target',         color: '#2a0d10', accent: '#ff4d6a' },
+  { id: 'wydatki',       name: 'Bilans wydatków',   icon: 'ti-coin',           color: '#082422', accent: '#00e5cc' },
+  { id: 'inwestycje',    name: 'Inwestycje',        icon: 'ti-trending-up',    color: '#0a2010', accent: '#00d46a' },
+  { id: 'trening',       name: 'Trening',           icon: 'ti-barbell',        color: '#2a0a1a', accent: '#ff3d9a' },
+  { id: 'zakupy',        name: 'Do kupienia',       icon: 'ti-shopping-cart',  color: '#080e2e', accent: '#4d8fff' },
+  { id: 'podroze',       name: 'Podróże',           icon: 'ti-plane',          color: '#082820', accent: '#00c8a0' },
 ];
 
 let tiles = [];
 let menuOpen = false;
 let currentTile = null;
 let fromMenu = false;
+let editingIndex = -1;
+let editIcon = '';
+let editAccent = '';
 
 function loadData() {
-  const saved = localStorage.getItem('dashboard_order');
-  if (saved) {
-    try {
-      const ids = JSON.parse(saved);
-      tiles = ids.map(id => DEFAULT_TILES.find(t => t.id === id)).filter(Boolean);
-      const newOnes = DEFAULT_TILES.filter(t => !ids.includes(t.id));
-      tiles = [...tiles, ...newOnes];
-    } catch { tiles = [...DEFAULT_TILES]; }
-  } else {
-    tiles = [...DEFAULT_TILES];
+  const raw = localStorage.getItem('dashboard_tiles_v2');
+  if (raw) {
+    try { tiles = JSON.parse(raw); return; } catch {}
   }
+  // migrate from old order key
+  const order = localStorage.getItem('dashboard_order');
+  if (order) {
+    try {
+      const ids = JSON.parse(order);
+      tiles = ids.map(id => DEFAULT_TILES.find(t => t.id === id)).filter(Boolean);
+      const rest = DEFAULT_TILES.filter(t => !ids.includes(t.id));
+      tiles = [...tiles, ...rest];
+      return;
+    } catch {}
+  }
+  tiles = [...DEFAULT_TILES];
 }
 
-function saveOrder() {
-  localStorage.setItem('dashboard_order', JSON.stringify(tiles.map(t => t.id)));
+function saveData() {
+  localStorage.setItem('dashboard_tiles_v2', JSON.stringify(tiles));
 }
 
 function loadNote(id) { return localStorage.getItem('note_' + id) || ''; }
@@ -323,8 +350,13 @@ const elNoteColorDot = document.getElementById('note-color-dot');
 const elMenuToggle = document.getElementById('menu-toggle');
 const elBackBtn = document.getElementById('back-btn');
 const elDotsBtn = document.getElementById('dots-btn');
-const elReorderOverlay = document.getElementById('reorder-overlay');
-const elReorderList = document.getElementById('reorder-list');
+const elManageOverlay = document.getElementById('manage-overlay');
+const elManageList = document.getElementById('manage-list');
+const elEditPanel = document.getElementById('edit-panel');
+const elEditNameInput = document.getElementById('edit-name-input');
+const elColorPicker = document.getElementById('color-picker');
+const elIconGrid = document.getElementById('icon-grid');
+const elIconSearch = document.getElementById('icon-search-input');
 const elTopbarTitle = document.getElementById('topbar-title');
 
 function renderGridView() {
@@ -408,36 +440,41 @@ elNoteArea.addEventListener('input', () => {
   if (currentTile) saveNote(currentTile.id, elNoteArea.value);
 });
 
+// MANAGE
 elDotsBtn.addEventListener('click', () => {
-  renderReorderList();
-  elReorderOverlay.style.display = 'flex';
+  renderManageList();
+  elManageOverlay.style.display = 'flex';
 });
 
-document.getElementById('reorder-done').addEventListener('click', () => {
-  elReorderOverlay.style.display = 'none';
-  saveOrder();
+document.getElementById('manage-done').addEventListener('click', () => {
+  elManageOverlay.style.display = 'none';
+  saveData();
   renderGridView();
 });
 
-function renderReorderList() {
-  elReorderList.innerHTML = '';
+document.getElementById('manage-add-btn').addEventListener('click', () => {
+  openEditPanel(-1);
+});
+
+function renderManageList() {
+  elManageList.innerHTML = '';
   tiles.forEach((tile, i) => {
     const el = document.createElement('div');
-    el.className = 'reorder-item';
+    el.className = 'manage-item';
     el.innerHTML = `
-      <div class="reorder-item-icon" style="background:${tile.color}">
+      <div class="manage-item-icon" style="background:${tile.color}">
         <i class="ti ${tile.icon}" style="color:${tile.accent}"></i>
       </div>
-      <span class="reorder-item-name">${tile.name}</span>
-      <div class="reorder-btns">
-        <button onclick="moveItem(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Przesuń wyżej">
-          <i class="ti ti-chevron-up"></i>
-        </button>
-        <button onclick="moveItem(${i},1)" ${i === tiles.length - 1 ? 'disabled' : ''} aria-label="Przesuń niżej">
-          <i class="ti ti-chevron-down"></i>
-        </button>
+      <span class="manage-item-name">${tile.name}</span>
+      <div class="manage-item-actions">
+        <button class="mi-btn edit" onclick="openEditPanel(${i})" aria-label="Edytuj"><i class="ti ti-pencil"></i></button>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <button class="mi-btn arr" onclick="moveItem(${i},-1)" ${i===0?'disabled':''} aria-label="Wyżej"><i class="ti ti-chevron-up"></i></button>
+          <button class="mi-btn arr" onclick="moveItem(${i},1)" ${i===tiles.length-1?'disabled':''} aria-label="Niżej"><i class="ti ti-chevron-down"></i></button>
+        </div>
+        <button class="mi-btn del" onclick="deleteTile(${i})" aria-label="Usuń"><i class="ti ti-trash"></i></button>
       </div>`;
-    elReorderList.appendChild(el);
+    elManageList.appendChild(el);
   });
 }
 
@@ -445,8 +482,96 @@ window.moveItem = function(i, dir) {
   const j = i + dir;
   if (j < 0 || j >= tiles.length) return;
   [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-  renderReorderList();
+  renderManageList();
 };
+
+window.deleteTile = function(i) {
+  if (!confirm(`Usunąć kafelek "${tiles[i].name}"?`)) return;
+  tiles.splice(i, 1);
+  renderManageList();
+};
+
+window.openEditPanel = function(i) {
+  editingIndex = i;
+  const tile = i >= 0 ? tiles[i] : null;
+  document.getElementById('edit-title-bar').textContent = i >= 0 ? 'Edytuj kafelek' : 'Nowy kafelek';
+  elEditNameInput.value = tile ? tile.name : '';
+  editAccent = tile ? tile.accent : ACCENT_COLORS[0];
+  editIcon = tile ? tile.icon : ICON_LIST[0];
+
+  renderColorPicker();
+  renderIconGrid('');
+  elIconSearch.value = '';
+  elEditPanel.style.display = 'flex';
+  setTimeout(() => elEditNameInput.focus(), 100);
+};
+
+function renderColorPicker() {
+  elColorPicker.innerHTML = '';
+  ACCENT_COLORS.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'color-swatch' + (c === editAccent ? ' selected' : '');
+    el.style.background = c;
+    el.innerHTML = '<i class="ti ti-check"></i>';
+    el.addEventListener('click', () => {
+      editAccent = c;
+      renderColorPicker();
+    });
+    elColorPicker.appendChild(el);
+  });
+}
+
+function renderIconGrid(filter) {
+  const q = filter.toLowerCase().replace('ti-','');
+  const filtered = q ? ICON_LIST.filter(ic => ic.replace('ti-','').includes(q)) : ICON_LIST;
+  elIconGrid.innerHTML = '';
+  filtered.forEach(ic => {
+    const el = document.createElement('button');
+    el.className = 'icon-btn' + (ic === editIcon ? ' selected' : '');
+    el.style.color = ic === editIcon ? editAccent : '';
+    el.innerHTML = `<i class="ti ${ic}"></i>`;
+    el.addEventListener('click', () => {
+      editIcon = ic;
+      renderIconGrid(elIconSearch.value);
+    });
+    elIconGrid.appendChild(el);
+  });
+}
+
+elIconSearch.addEventListener('input', () => renderIconGrid(elIconSearch.value));
+
+document.getElementById('edit-save').addEventListener('click', () => {
+  const name = elEditNameInput.value.trim();
+  if (!name) { elEditNameInput.focus(); return; }
+
+  const bgColor = TILE_COLORS[Math.floor(Math.random() * TILE_COLORS.length)];
+
+  if (editingIndex >= 0) {
+    tiles[editingIndex].name = name;
+    tiles[editingIndex].icon = editIcon;
+    tiles[editingIndex].accent = editAccent;
+  } else {
+    const id = 'tile-' + Date.now();
+    tiles.push({ id, name, icon: editIcon, color: bgColor, accent: editAccent });
+  }
+
+  elEditPanel.style.display = 'none';
+  renderManageList();
+});
+
+// close edit panel with back swipe / button — no separate back btn, tap outside name area
+elEditPanel.addEventListener('click', e => {
+  if (e.target === elEditPanel) elEditPanel.style.display = 'none';
+});
+
+document.getElementById('edit-header').querySelector('#edit-title-bar').addEventListener('click', () => {});
+
+// Add back arrow to edit panel header
+const editBackBtn = document.createElement('button');
+editBackBtn.style.cssText = 'background:none;border:none;color:#e8eaf0;font-size:20px;cursor:pointer;display:flex;align-items:center;padding:0;margin-right:10px';
+editBackBtn.innerHTML = '<i class="ti ti-chevron-left"></i>';
+editBackBtn.addEventListener('click', () => { elEditPanel.style.display = 'none'; });
+document.getElementById('edit-header').prepend(editBackBtn);
 
 loadData();
 renderGridView();
