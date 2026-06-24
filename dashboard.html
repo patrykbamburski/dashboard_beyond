@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dashboard">
+<title>Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    background: #0a0a0a;
+    color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    height: 100%;
+    overflow: hidden;
+    user-select: none;
+  }
+  #app {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
+  #topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: env(safe-area-inset-top, 16px) 20px 12px;
+    padding-top: max(env(safe-area-inset-top), 16px);
+    flex-shrink: 0;
+  }
+  #topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: -.3px; }
+  #dots-btn {
+    background: none;
+    border: none;
+    color: #f0f0f0;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+  }
+
+  /* MAIN VIEW */
+  #main-view { flex: 1; overflow: hidden; position: relative; }
+
+  /* GRID 4-column */
+  #grid-view {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    padding: 2px;
+    height: 100%;
+    align-content: start;
+  }
+  .tile-small {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 4px;
+    transition: opacity .15s;
+  }
+  .tile-small:active { opacity: .6; }
+  .tile-name {
+    font-size: 9px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 5px;
+    line-height: 1.2;
+    letter-spacing: .2px;
+    color: #aaa;
+  }
+
+  /* MENU 2-column */
+  #menu-view { display: none; height: 100%; overflow-y: auto; padding: 2px; }
+  #menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .tile-big {
+    aspect-ratio: 1;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    transition: opacity .15s;
+  }
+  .tile-big:active { opacity: .7; }
+  .tile-big-icon { font-size: 28px; margin-bottom: auto; }
+  .tile-big-name { font-size: 14px; font-weight: 600; letter-spacing: -.2px; line-height: 1.2; color: #f0f0f0; }
+  .tile-big-sub { font-size: 11px; color: #666; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* NOTE VIEW */
+  #note-view { display: none; height: 100%; flex-direction: column; }
+  #note-header {
+    padding: 14px 20px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  #note-color-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  #note-title { font-size: 15px; font-weight: 600; }
+  #note-area {
+    flex: 1;
+    padding: 16px 20px;
+    font-size: 15px;
+    line-height: 1.75;
+    resize: none;
+    background: transparent;
+    border: none;
+    color: #e8e8e8;
+    outline: none;
+    font-family: inherit;
+    overflow-y: auto;
+  }
+  #note-area::placeholder { color: #333; }
+
+  /* BOTTOM BAR */
+  #bottom-bar {
+    flex-shrink: 0;
+    padding: 10px 20px;
+    padding-bottom: max(env(safe-area-inset-bottom), 20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #111;
+    min-height: 64px;
+  }
+  #menu-toggle {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid #2a2a2a;
+    background: none;
+    color: #f0f0f0;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
+  }
+  #menu-toggle:active { background: #1a1a1a; }
+  #back-btn {
+    background: none;
+    border: none;
+    color: #f0f0f0;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0;
+    font-family: inherit;
+  }
+  #back-btn i { font-size: 20px; }
+
+  /* REORDER OVERLAY */
+  #reorder-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: #0a0a0a;
+    z-index: 20;
+    flex-direction: column;
+  }
+  #reorder-header {
+    padding: max(env(safe-area-inset-top), 16px) 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  #reorder-title { font-size: 16px; font-weight: 600; }
+  #reorder-done {
+    background: none;
+    border: 1px solid #333;
+    color: #f0f0f0;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #reorder-list { flex: 1; overflow-y: auto; padding: 0 4px; }
+  .reorder-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 12px;
+    border-bottom: 1px solid #141414;
+  }
+  .reorder-item-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .reorder-item-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .reorder-btns { display: flex; flex-direction: column; gap: 4px; }
+  .reorder-btns button {
+    background: none;
+    border: 1px solid #2a2a2a;
+    color: #888;
+    width: 30px;
+    height: 26px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 14px;
+  }
+  .reorder-btns button:active { background: #1e1e1e; }
+  .reorder-btns button:disabled { opacity: .2; cursor: default; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <h1 id="topbar-title">Dashboard</h1>
+    <button id="dots-btn" aria-label="Zmień kolejność">•••</button>
+  </div>
+
+  <div id="main-view">
+    <div id="grid-view"></div>
+    <div id="menu-view"><div id="menu-grid"></div></div>
+    <div id="note-view">
+      <div id="note-header">
+        <div id="note-color-dot"></div>
+        <span id="note-title"></span>
+      </div>
+      <textarea id="note-area" placeholder="Zacznij pisać..."></textarea>
+    </div>
+  </div>
+
+  <div id="bottom-bar">
+    <button id="menu-toggle" aria-label="Menu"><i class="ti ti-plus"></i></button>
+    <button id="back-btn" style="display:none"><i class="ti ti-chevron-left"></i><span>Wróć</span></button>
+  </div>
+
+  <div id="reorder-overlay">
+    <div id="reorder-header">
+      <span id="reorder-title">Zmień kolejność</span>
+      <button id="reorder-done">Gotowe</button>
+    </div>
+    <div id="reorder-list"></div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_TILES = [
+  { id: 'plan-dnia',      name: 'Plan dnia',         icon: 'ti-calendar-event', color: '#0f1423', accent: '#4f8ef7' },
+  { id: 'kalorie',        name: 'Bilans kaloryczny',  icon: 'ti-salad',          color: '#0d1a0d', accent: '#4caf50' },
+  { id: 'plan-tygodnia',  name: 'Plan tygodnia',      icon: 'ti-calendar-week',  color: '#1e1805', accent: '#f5a623' },
+  { id: 'plan-miesiaca',  name: 'Plan miesiąca',      icon: 'ti-calendar-month', color: '#160d1e', accent: '#b967db' },
+  { id: 'cele',           name: 'Cele',               icon: 'ti-target',         color: '#1e0d0d', accent: '#e74c3c' },
+  { id: 'wydatki',        name: 'Bilans wydatków',    icon: 'ti-coin',           color: '#051a18', accent: '#1abc9c' },
+  { id: 'inwestycje',     name: 'Inwestycje',         icon: 'ti-trending-up',    color: '#071a07', accent: '#27ae60' },
+  { id: 'trening',        name: 'Trening',            icon: 'ti-barbell',        color: '#1a0510', accent: '#e84393' },
+  { id: 'zakupy',         name: 'Do kupienia',        icon: 'ti-shopping-cart',  color: '#05050f', accent: '#3498db' },
+  { id: 'podroze',        name: 'Podróże',            icon: 'ti-plane',          color: '#021a12', accent: '#16a085' },
+];
+
+let tiles = [];
+let menuOpen = false;
+let currentTile = null;
+let fromMenu = false;
+
+function loadData() {
+  const saved = localStorage.getItem('dashboard_order');
+  if (saved) {
+    try {
+      const ids = JSON.parse(saved);
+      tiles = ids.map(id => DEFAULT_TILES.find(t => t.id === id)).filter(Boolean);
+      const newOnes = DEFAULT_TILES.filter(t => !ids.includes(t.id));
+      tiles = [...tiles, ...newOnes];
+    } catch { tiles = [...DEFAULT_TILES]; }
+  } else {
+    tiles = [...DEFAULT_TILES];
+  }
+}
+
+function saveOrder() {
+  localStorage.setItem('dashboard_order', JSON.stringify(tiles.map(t => t.id)));
+}
+
+function loadNote(id) { return localStorage.getItem('note_' + id) || ''; }
+function saveNote(id, val) { localStorage.setItem('note_' + id, val); }
+
+const elGrid = document.getElementById('grid-view');
+const elMenuView = document.getElementById('menu-view');
+const elMenuGrid = document.getElementById('menu-grid');
+const elNoteView = document.getElementById('note-view');
+const elNoteTitle = document.getElementById('note-title');
+const elNoteArea = document.getElementById('note-area');
+const elNoteColorDot = document.getElementById('note-color-dot');
+const elMenuToggle = document.getElementById('menu-toggle');
+const elBackBtn = document.getElementById('back-btn');
+const elDotsBtn = document.getElementById('dots-btn');
+const elReorderOverlay = document.getElementById('reorder-overlay');
+const elReorderList = document.getElementById('reorder-list');
+const elTopbarTitle = document.getElementById('topbar-title');
+
+function renderGridView() {
+  elGrid.innerHTML = '';
+  tiles.forEach(tile => {
+    const el = document.createElement('div');
+    el.className = 'tile-small';
+    el.style.background = tile.color;
+    el.innerHTML = `<i class="ti ${tile.icon}" style="color:${tile.accent};font-size:22px"></i><span class="tile-name">${tile.name}</span>`;
+    el.addEventListener('click', () => openNote(tile, false));
+    elGrid.appendChild(el);
+  });
+}
+
+function renderMenuView() {
+  elMenuGrid.innerHTML = '';
+  tiles.forEach(tile => {
+    const el = document.createElement('div');
+    el.className = 'tile-big';
+    el.style.background = tile.color;
+    el.style.borderLeft = `3px solid ${tile.accent}`;
+    const preview = loadNote(tile.id);
+    const sub = preview ? preview.replace(/\n/g, ' ').slice(0, 45) + (preview.length > 45 ? '…' : '') : 'Brak notatek';
+    el.innerHTML = `<i class="ti ${tile.icon} tile-big-icon" style="color:${tile.accent}"></i><div class="tile-big-name">${tile.name}</div><div class="tile-big-sub">${sub}</div>`;
+    el.addEventListener('click', () => openNote(tile, true));
+    elMenuGrid.appendChild(el);
+  });
+}
+
+function setView(v) {
+  elGrid.style.display = 'none';
+  elMenuView.style.display = 'none';
+  elNoteView.style.display = 'none';
+  elMenuToggle.style.display = 'none';
+  elBackBtn.style.display = 'none';
+  elDotsBtn.style.display = 'none';
+
+  if (v === 'grid') {
+    elGrid.style.display = 'grid';
+    elMenuToggle.style.display = 'flex';
+    elMenuToggle.innerHTML = '<i class="ti ti-plus"></i>';
+    menuOpen = false;
+    elDotsBtn.style.display = 'flex';
+    elTopbarTitle.textContent = 'Dashboard';
+  } else if (v === 'menu') {
+    elMenuView.style.display = 'block';
+    elMenuToggle.style.display = 'flex';
+    elMenuToggle.innerHTML = '<i class="ti ti-chevron-left"></i>';
+    menuOpen = true;
+    elTopbarTitle.textContent = 'Menu';
+  } else if (v === 'note') {
+    elNoteView.style.display = 'flex';
+    elBackBtn.style.display = 'flex';
+    elTopbarTitle.textContent = '';
+  }
+}
+
+function openNote(tile, fromMenuFlag) {
+  currentTile = tile;
+  fromMenu = fromMenuFlag;
+  elNoteTitle.textContent = tile.name;
+  elNoteColorDot.style.background = tile.accent;
+  elNoteArea.value = loadNote(tile.id);
+  setView('note');
+  setTimeout(() => elNoteArea.focus(), 150);
+}
+
+elMenuToggle.addEventListener('click', () => {
+  if (menuOpen) { renderGridView(); setView('grid'); }
+  else { renderMenuView(); setView('menu'); }
+});
+
+elBackBtn.addEventListener('click', () => {
+  if (currentTile) saveNote(currentTile.id, elNoteArea.value);
+  if (fromMenu) { renderMenuView(); setView('menu'); }
+  else { renderGridView(); setView('grid'); }
+  currentTile = null;
+});
+
+elNoteArea.addEventListener('input', () => {
+  if (currentTile) saveNote(currentTile.id, elNoteArea.value);
+});
+
+elDotsBtn.addEventListener('click', () => {
+  renderReorderList();
+  elReorderOverlay.style.display = 'flex';
+});
+
+document.getElementById('reorder-done').addEventListener('click', () => {
+  elReorderOverlay.style.display = 'none';
+  saveOrder();
+  renderGridView();
+});
+
+function renderReorderList() {
+  elReorderList.innerHTML = '';
+  tiles.forEach((tile, i) => {
+    const el = document.createElement('div');
+    el.className = 'reorder-item';
+    el.innerHTML = `
+      <div class="reorder-item-icon" style="background:${tile.color}">
+        <i class="ti ${tile.icon}" style="color:${tile.accent}"></i>
+      </div>
+      <span class="reorder-item-name">${tile.name}</span>
+      <div class="reorder-btns">
+        <button onclick="moveItem(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Przesuń wyżej">
+          <i class="ti ti-chevron-up"></i>
+        </button>
+        <button onclick="moveItem(${i},1)" ${i === tiles.length - 1 ? 'disabled' : ''} aria-label="Przesuń niżej">
+          <i class="ti ti-chevron-down"></i>
+        </button>
+      </div>`;
+    elReorderList.appendChild(el);
+  });
+}
+
+window.moveItem = function(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= tiles.length) return;
+  [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+  renderReorderList();
+};
+
+loadData();
+renderGridView();
+setView('grid');
+</script>
+</body>
+</html>
