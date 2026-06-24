@@ -91,8 +91,8 @@
   }
 
   /* MENU 2-column */
-  #menu-view { display: none; height: 100%; overflow-y: auto; padding: 2px; }
-  #menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  #menu-view { display: none; height: 100%; overflow-y: auto; overflow-x: hidden; padding: 2px; width: 100%; }
+  #menu-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; width: 100%; }
   .tile-big {
     aspect-ratio: 1;
     cursor: pointer;
